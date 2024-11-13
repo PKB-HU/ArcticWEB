@@ -27,7 +27,7 @@ class ContentServer:
             self.admins = json.load(admin_json)
         self.logger.info("Admins loaded successfully!")
         self.clients = {}
-        self.packet_delay = 0.02
+        self.packet_delay = 0.01
     
     def start(self):
         self.socket.bind((self.host, self.port))
