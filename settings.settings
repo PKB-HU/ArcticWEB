@@ -1,0 +1,67 @@
+ArcticWEB Private Server 2.0 Version
+
+names {
+    label : Stray
+    server-name : stray-main-server
+    server-name-to-show : Stray
+
+connect {
+    connect-to-main-server : True
+
+colors {
+    buttonframe-background : black
+    opacity : 0.9
+    label-color : red
+    label-background-color : black
+    label-size : 100
+    background : black
+    font-color : red
+    font-background-color : black
+    result-text-box-color : black
+    result-text-box-edge-color : red
+    result-text-box-edge-color-selected : orange
+    result-text-box-edge-size : 2
+    searchbar-color : black
+    searchbar-edge-color : red
+    searchbar-edge-color-selected : orange
+    searchbar-edge-size : 1
+    send-command-background-color : black
+    send-command-text-color : red
+    send-command-pressed-background-color : red
+    send-command-pressed-text-color : black
+    refresh-list-background-color : black
+    refresh-list-text-color : red
+    refresh-list-pressed-background-color : red
+    refresh-list-pressed-text-color : orange
+    create-new-background-color : black
+    create-new-text-color : red
+    create-new-pressed-background-color : red
+    create-new-pressed-text-color : orange
+
+whitelist { //type open if there is no whitelist //type only in one row
+    whitelist : open
+
+messages {
+    start-text : It works!
+    not-found : Article not found!
+    got-admin : Got admin rights
+    maintenance : Server is under maintenance
+    not-on-whitelist : You are not on the whitelist!
+    help : None
+    added-someone-to-admins : {user} added to the admins!
+    failed-to-add-someone-to-admins : Error!
+    added-someone-to-whitelist : {user} added to whitelist!
+    failed-to-add-someone-to-whitelist : Error!
+    command-disabled : The command is disabled!
+
+rules {
+    rules : There are no rules on the main server!
+    create-new-articles : True
+    only-admins-create-new-articles : False
+
+other {
+    private : False
+    premium : False
+    price-if-premium : 0
+
+
