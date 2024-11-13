@@ -1,43 +1,43 @@
 {
     "names": {
         "label" : "Stray",
-        "server-name" : "stray-main-server",
-        "server-name-to-show" : "Stray"
+        "server_name" : "stray-main-server",
+        "server_name_to_show" : "Stray"
     },
 
     "connect": {
-        "connect-to-main-server": true
+        "connect_to_main_server": "True"
     },
 
     "colors": {
-        "buttonframe-background" : "black",
-        "opacity" : 0.9,
-        "label-color" : "red",
-        "label-background-color" : "black",
-        "label-size" : 100,
+        "buttonframe_background" : "black",
+        "opacity" : "0.9",
+        "label_color" : "red",
+        "label_background_color" : "black",
+        "label_size" : "100",
         "background" : "black",
-        "font-color" : "red",
-        "font-background-color" : "black",
-        "result-text-box-color" : "black",
-        "result-text-box-edge-color" : "red",
-        "result-text-box-edge-color-selected" : "orange",
-        "result-text-box-edge-size" : 2,
-        "searchbar-color" : "black",
-        "searchbar-edge-color" : "red",
-        "searchbar-edge-color-selected" : "orange",
-        "searchbar-edge-size" : 1,
-        "send-command-background-color" : "black",
-        "send-command-text-color" : "red",
-        "send-command-pressed-background-color" : "red",
-        "send-command-pressed-text-color" : "black",
-        "refresh-list-background-color" : "black",
-        "refresh-list-text-color" : "red",
-        "refresh-list-pressed-background-color" : "red",
-        "refresh-list-pressed-text-color" : "orange",
-        "create-new-background-color" : "black",
-        "create-new-text-color" : "red",
-        "create-new-pressed-background-color" : "red",
-        "create-new-pressed-text-color" : "orange"
+        "font_color" : "red",
+        "font_background_color" : "black",
+        "result_text_box_color" : "black",
+        "result_text_box_edge_color" : "red",
+        "result_text_box_edge_color_selected" : "orange",
+        "result_text_box_edge_size" : "2",
+        "searchbar_color" : "black",
+        "searchbar_edge_color" : "red",
+        "searchbar_edge_color_selected" : "orange",
+        "searchbar_edge_size" : "1",
+        "send_command_background_color" : "black",
+        "send_command_text_color" : "red",
+        "send_command_pressed_background_color" : "red",
+        "send_command_pressed_text_color" : "black",
+        "refresh_list_background_color" : "black",
+        "refresh_list_text_color" : "red",
+        "refresh_list_pressed_background_color" : "red",
+        "refresh_list_pressed_text_color" : "orange",
+        "create_new_background_color" : "black",
+        "create_new_text_color" : "red",
+        "create_new_pressed_background_color" : "red",
+        "create_new_pressed_text_color" : "orange"
     },
 
     "whitelist": { 
@@ -45,29 +45,29 @@
 },
 
     "messages": {
-        "start-text" : "It works!",
-        "not-found" : "Article not found!",
-        "got-admin" : "Got admin rights",
+        "start_text" : "It works!",
+        "not_found" : "Article not found!",
+        "got_admin" : "Got admin rights",
         "maintenance" : "Server is under maintenance",
-        "not-on-whitelist" : "You are not on the whitelist!",
+        "not_on_whitelist" : "You are not on the whitelist!",
         "help" : "None",
-        "added-someone-to-admins" : "{user} added to the admins!",
-        "failed-to-add-someone-to-admins" : "Error!",
-        "added-someone-to-whitelist" : "{user} added to whitelist!",
-        "failed-to-add-someone-to-whitelist" : "Error!",
-        "command-disabled" : "The command is disabled!"
+        "added_someone_to_admins" : "{user} added to the admins!",
+        "failed_to_add_someone_to_admins" : "Error!",
+        "added_someone_to_whitelist" : "{user} added to whitelist!",
+        "failed_to_add_someone_to_whitelist" : "Error!",
+        "command_disabled" : "The command is disabled!"
     },
 
     "rules": {
         "rules" : "There are no rules on the main server!",
-        "create-new-articles" : "True",
-        "only-admins-create-new-articles" : "False"
+        "create_new_articles" : "True",
+        "only_admins_create_new_articles" : "False"
     },
 
     "other": {
         "private" : "False",
         "premium" : "False",
-        "price-if-premium" : 0
+        "price_if_premium" : "0"
     }
 
 }

@@ -79,7 +79,7 @@ def listen():
     s.settimeout(None)
     print('[STARTING] Binding sockets...')
 
-    s.bind(('192.168.1.10', 5667))  # socket.gethostname()
+    s.bind(('127.0.0.1', 5667))  # general interface
     s.listen(10)
     print('[STARTING] Started!')
     print('[LISTENING] Listening for maximum 10 users...')
