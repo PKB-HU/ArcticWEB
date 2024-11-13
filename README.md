@@ -67,7 +67,7 @@ After this, the server goes into command-processing mode and waits for messages 
 The server can process the following commands:
 
 - usr<username>: this informs the server about the nickname of the connected user. The server sends back a 1 if the user is admin, otherwise sends a 0.
-- need: the server sends back the list of available sites.
+- need<sitename>: the server sends back the requested site.
 - create<siteName>: creates a site, and writes subsequent messages into it, until it encounters a message with the content "//quit".
 - list: sends back the list of available sites
 - ###close: closes the connection, disconnects the user.
