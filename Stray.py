@@ -20,6 +20,8 @@ admin = False
 
 VERSION = '2.0'
 
+clear_command = "cls" if opsys == "Windows" else "clear"
+
 
 def send_username(username_):
     username_command = f'usr{username_}'
@@ -77,7 +79,7 @@ while connect is False:
             q.send("0".encode("utf-8"))
             time.sleep(0.1)
             print("Waiting for list...")
-            os.system("cls")
+            os.system(clear_command)
             server_list = q.recv(1024).decode("utf-8")
             print("\n")
             print("\n")
@@ -90,7 +92,7 @@ while connect is False:
             time.sleep(0.1)
             ip_to_connect = q.recv(1024).decode("utf-8")
             time.sleep(1)
-            os.system("cls")
+            os.system(clear_command)
             print(f"IP : {ip_to_connect}")
             q.close()
         except:
@@ -101,7 +103,7 @@ while connect is False:
 # username = askstring('Stray', 'Username : ')
 username = input("Nickname : ")
 
-os.system("cls")
+os.system(clear_command)
 
 
 
@@ -209,7 +211,7 @@ while connect is False:
         update_checker()
         connect = True
         print(f"Connected to server : {server_name}")
-        os.system("cls")
+        os.system(clear_command)
 
 
     # except:
