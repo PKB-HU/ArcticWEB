@@ -3,80 +3,81 @@ import threading
 import time
 import requests as req
 import datetime
+import json
 
 print("Welcome to Stray Host!")
 
 try:
-    with open(f'settings.settings', 'r') as a:
+    with open(f'settings.json', 'r') as a:
         print("Reading settings.settings file.")
-        a.readline()
-        a.readline()
-        a.readline()
-        label = a.readline().replace("    label : ", "")
-        server_name = a.readline().replace("    server-name : ", "")
-        server_name_to_show = a.readline().replace("    server-name-to-show : ", "")
-        a.readline()
-        a.readline()
-        connect_to_main_server = a.readline().replace("    connect-to-main-server : ", "")
-        a.readline()
-        a.readline()
-        buttonframe_bg = a.readline().replace("    buttonframe-background : ", "")
-        opacity = a.readline().replace("    opacity : ", "")
-        label_color = a.readline().replace("    label-color : ", "")
-        label_background_color = a.readline().replace("    label-background-color : ", "")
-        label_size = a.readline().replace("    label-size : ", "")
-        background = a.readline().replace("    background : ", "")
-        font_color = a.readline().replace("    font-color : ", "")
-        font_background_color = a.readline().replace("    font-background-color : ", "")
-        result_text_box_color = a.readline().replace("    result-text-box-color : ", "")
-        result_text_box_edge_color = a.readline().replace("    result-text-box-edge-color : ", "")
-        result_text_box_edge_color_selected = a.readline().replace("    result-text-box-edge-color-selected : ", "")
-        result_text_box_edge_size = a.readline().replace("    result-text-box-edge-size : ", "")
-        searchbar_color = a.readline().replace("    searchbar-color : ", "")
-        searchbar_edge_color = a.readline().replace("    searchbar-edge-color : ", "")
-        searchbar_edge_color_selected = a.readline().replace("    searchbar-edge-color-selected : ", "")
-        searchbar_edge_size = a.readline().replace("    searchbar-edge-size : ", "")
-        send_command_background_color = a.readline().replace("    send-command-background-color : ", "")
-        send_command_text_color = a.readline().replace("    send-command-text-color : ", "")
-        send_command_pressed_background_color = a.readline().replace("    send-command-pressed-background-color : ", "")
-        send_command_pressed_text_color = a.readline().replace("    send-command-pressed-text-color : ", "")
-        refresh_list_background_color = a.readline().replace("    refresh-list-background-color : ", "")
-        refresh_list_text_color = a.readline().replace("    refresh-list-text-color : ", "")
-        refresh_list_pressed_background_color = a.readline().replace("    refresh-list-pressed-background-color : ", "")
-        refresh_list_pressed_text_color = a.readline().replace("    refresh-list-pressed-text-color : ", "")
-        create_new_background_color = a.readline().replace("    create-new-background-color : ", "")
-        create_new_text_color = a.readline().replace("    create-new-text-color : ", "")
-        create_new_pressed_background_color = a.readline().replace("    create-new-pressed-background-color : ", "")
-        create_new_pressed_text_color = a.readline().replace("    create-new-pressed-text-color : ", "")
-        a.readline()
-        a.readline()
-        whitelist = a.readline().replace("    whitelist : ", "")
-        a.readline()
-        a.readline()
-        start_text = a.readline().replace("    start-text : ", "")
-        not_found = a.readline().replace("    not-found : ", "")
-        got_admin = a.readline().replace("    got-admin : ", "")
-        maintenance = a.readline().replace("    maintenance : ", "")
-        not_on_whitelist = a.readline().replace("    not-on-whitelist : ", "")
-        help = a.readline().replace("    help : ", "")
-        added_someone_to_admins = a.readline().replace("    added-someone-to-admins : ", "")
-        failed_to_add_someone_to_admins = a.readline().replace("    failed_to_add_someone_to_admins : ", "")
-        added_someone_to_whitelist = a.readline().replace("    added-someone-to-whitelist : ", "")
-        failed_to_add_someone_to_whitelist = a.readline().replace("    failed_to_add_someone_to_whitelist : ", "")
-        command_disabled = a.readline().replace("    command-disabled : ", "")
-        a.readline()
-        a.readline()
-        rules = a.readline().replace("    rules : ", "")
-        create_new_articles = a.readline().replace("    create-new-articles : ", "")
-        only_admins_create_new_articles = a.readline().replace("    only-admins-create-new-articles : ", "")
-        a.readline()
-        a.readline()
-        private = a.readline().replace("    private : ", "")
-        premium = a.readline().replace("    premium : ", "")
-        price_if_premium = a.readline().replace("    price_if_premium : ", "")
+        settings_dict = json.load(a)
+
+        # Names
+        label = settings_dict["names"]["label"]
+        server_name = settings_dict["names"]["server_name"]
+        server_name_to_show = settings_dict["names"]["server_name_to_show"]
+
+        # Connection
+        connect_to_main_server = settings_dict["connect_to_main_server"]
+
+        # Colors
+        buttonframe_bg = settings_dict["colors"]["buttonframe_background"]
+        opacity = settings_dict["colors"]["opacity"]
+        label_color = settings_dict["colors"]["label_color"]
+        label_background_color = settings_dict["colors"]["label_background_color"]
+        label_size = settings_dict["colors"]["label_size"]
+        background = settings_dict["colors"]["background"]
+        font_color = settings_dict["colors"]["font_color"]
+        font_background_color = settings_dict["colors"]["font_background_color"]
+        result_text_box_color = settings_dict["colors"]["result_text_box_color"]
+        result_text_box_edge_color = settings_dict["colors"]["result_text_box_edge_color"]
+        result_text_box_edge_color_selected = settings_dict["colors"]["result_text_box_edge_color_selected"]
+        result_text_box_edge_size = settings_dict["colors"]["result_text_box_edge_size"]
+        searchbar_color = settings_dict["colors"]["searchbar_color"]
+        searchbar_edge_color = settings_dict["colors"]["searchbar_edge_color"]
+        searchbar_edge_color_selected = settings_dict["colors"]["searchbar_edge_color_selected"]
+        searchbar_edge_size = settings_dict["colors"]["searchbar_edge_size"]
+        send_command_background_color = settings_dict["colors"]["send_command_background_color"]
+        send_command_text_color = settings_dict["colors"]["send_command_text_color"]
+        send_command_pressed_background_color = settings_dict["colors"]["send_command_pressed_background_color"]
+        send_command_pressed_text_color = settings_dict["colors"]["send_command_pressed_text_color"]
+        refresh_list_background_color = settings_dict["colors"]["refresh_list_background_color"]
+        refresh_list_text_color = settings_dict["colors"]["refresh_list_text_color"]
+        refresh_list_pressed_background_color = settings_dict["colors"]["refresh_list_pressed_background_color"]
+        refresh_list_pressed_text_color = settings_dict["colors"]["refresh_list_pressed_text_color"]
+        create_new_background_color = settings_dict["colors"]["create_new_background_color"]
+        create_new_text_color = settings_dict["colors"]["create_new_text_color"]
+        create_new_pressed_background_color = settings_dict["colors"]["create_new_pressed_background_color"]
+        create_new_pressed_text_color = settings_dict["colors"]["create_new_pressed_text_color"]
+
+        # Whitelist
+        whitelist = settings_dict["whitelist"]
+
+        # Messages
+        start_text = settings_dict["messages"]["start_text"]
+        not_found = settings_dict["messages"]["not_found"]
+        got_admin = settings_dict["messages"]["got_admin"]
+        maintenance = settings_dict["messages"]["maintenance"]
+        not_on_whitelist = settings_dict["messages"]["not_on_whitelist"]
+        help = settings_dict["messages"]["help"]
+        added_someone_to_admins = settings_dict["messages"]["added_someone_to_admins"]
+        failed_to_add_someone_to_admins = settings_dict["messages"]["failed_to_add_someone_to_admins"]
+        added_someone_to_whitelist = settings_dict["messages"]["added_someone_to_whitelist"]
+        failed_to_add_someone_to_whitelist = settings_dict["messages"]["failed_to_add_someone_to_whitelist"]
+        command_disabled = settings_dict["messages"]["command_disabled"]
+
+        # Rules
+        rules = settings_dict["rules"]["rules"]
+        create_new_articles = settings_dict["rules"]["create_new_articles"]
+        only_admins_create_new_articles = settings_dict["rules"]["only_admins_create_new_articles"]
+
+        # Misc
+        private = settings_dict["other"]["private"]
+        premium = settings_dict["other"]["premium"]
+        price_if_premium = settings_dict["other"]["price_if_premium"]
         print("DONE!")
-except:
-    print("ERROR reading settings.settings file!")
+except Exception as e:
+    print(f"ERROR reading settings.settings file! Error: {e.with_traceback(None)}")
 
 
 if False: # nem csinálja meg
