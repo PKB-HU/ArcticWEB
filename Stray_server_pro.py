@@ -356,9 +356,10 @@ def handle_client(clientsocket, address):
 def listen():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.settimeout(None)
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # SO_REUSEADDR allows the socket to be quickly reused after it has been closed.
     print('[STARTING] Binding sockets...')
 
-    s.bind(('192.168.1.10', 5666))  # socket.gethostname()
+    s.bind(('127.0.0.1', 5666))  # socket.gethostname()
     s.listen(10)
     print('[STARTING] Started!')
     print('[LISTENING] Listening for maximum 10 users...')
