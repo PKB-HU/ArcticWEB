@@ -5,9 +5,7 @@
         "server_name_to_show" : "Stray"
     },
 
-    "connect": {
-        "connect_to_main_server": "True"
-    },
+    "connect_to_main_server": "True",
 
     "colors": {
         "buttonframe_background" : "black",
@@ -40,9 +38,7 @@
         "create_new_pressed_text_color" : "orange"
     },
 
-    "whitelist": { 
-        "whitelist" : "open"
-},
+    "whitelist" : "open",
 
     "messages": {
         "start_text" : "It works!",
