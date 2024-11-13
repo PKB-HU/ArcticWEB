@@ -48,9 +48,9 @@
         "not_on_whitelist" : "You are not on the whitelist!",
         "help" : "None",
         "added_someone_to_admins" : "{user} added to the admins!",
-        "failed_to_add_someone_to_admins" : "Error!",
+        "failed_to_add_someone_to_admins" : "Failed to add to admins!",
         "added_someone_to_whitelist" : "{user} added to whitelist!",
-        "failed_to_add_someone_to_whitelist" : "Error!",
+        "failed_to_add_someone_to_whitelist" : "Failed to add to whitelist!",
         "command_disabled" : "The command is disabled!"
     },
 
