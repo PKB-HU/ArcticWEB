@@ -5,11 +5,11 @@
 ### Handshake
 
 Between Client and Main server on port 5667:
-Server          Client
-|  <----------  '0' This is a client
-serverlist------>|  Server sends back list of available servers
-|  <--------Server name user chose
-server IP ------>|  The IP of the server chosen by the user
+- Server          Client
+- |  <----------  '0' This is a client
+- serverlist------>|  Server sends back list of available servers
+- |  <--------Server name user chose
+- server IP ------>|  The IP of the server chosen by the user
 
 ### Connecting to Content server
 
