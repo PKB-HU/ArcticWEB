@@ -33,7 +33,12 @@ class MainServer:
     def handle_client(self, client_socket: socket.socket, client_address:socket.AddressInfo):
         is_server = client_socket.recv(1).decode() == "1"
         if is_server:
-            self.logger.info("Got server connection!")
+            servername = client_socket.recv(1024).decode()
+            self.logger.info(f"Got server connection from {servername}!")
+            saved_servers = os.listdir("servers/server_configs")
+            if servername not in saved_servers:
+                with open("servers/server_configs/" + servername, "w") as serverfile:
+                    serverfile.write(str(client_address[0]))
             # TODO implement saving server name and ip
         else:
             # send back list of available servers
