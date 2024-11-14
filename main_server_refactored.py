@@ -11,10 +11,11 @@ class MainServer:
         self.host = host
         self.port = port
         self.logger = logging.getLogger("MainServer")
-        self.logger.info("""
-            __  _____  ___    __    _    
-            ( (`  | |  | |_)  / /\  \ \_/ 
-            _)_)  |_|  |_| \ /_/--\  |_|  """)
+        #self.logger.info("""
+            #__  _____  ___    __    _
+            #( (`  | |  | |_)  / /\  \ \_/
+            #_)_)  |_|  |_| \ /_/--\  |_|  """)
+
         self.logger.info(f"Starting main server on {host}:{port}")
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.settimeout(None)
@@ -32,8 +33,8 @@ class MainServer:
     def handle_client(self, client_socket: socket.socket, client_address:socket.AddressInfo):
         is_server = client_socket.recv(1).decode() == "1"
         if is_server:
-            pass
-            # TODO implement
+            self.logger.info("Got server connection!")
+            # TODO implement saving server name and ip
         else:
             # send back list of available servers
             servers = os.listdir("servers/server_configs")

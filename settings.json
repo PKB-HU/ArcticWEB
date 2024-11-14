@@ -6,6 +6,7 @@
     },
 
     "connect_to_main_server": "True",
+    "main_server_ip": "127.0.0.1",
 
     "colors": {
         "buttonframe_background" : "black",

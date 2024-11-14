@@ -8,8 +8,10 @@ from time import sleep
 
 logging.basicConfig(stream=stdout, encoding='utf-8', level=logging.DEBUG)
 
+
 class ContentServer:
     def __init__(self, host, port):
+
         self.host = host
         self.port = port
         self.logger = logging.getLogger("ContentServer")
@@ -20,6 +22,15 @@ class ContentServer:
         with open("settings.json") as setting:
             self.settings = json.load(setting)
         self.logger.info("Settings loaded successfully!")
+
+        if self.settings["connect_to_main_server"]:
+            self.main_server_ip = self.settings["main_server_ip"]
+            self.main_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.main_server.connect((self.main_server_ip, 5667))
+            self.main_server.settimeout(None)
+            self.main_server.send("1".encode("utf-8"))
+            self.logger.info("Connected to main server!")
+
         with open("whitelist.encrypted") as whl:
             self.whitelist = whl.read().splitlines()
         self.logger.info("Whitelist loaded successfully!")

@@ -7,11 +7,11 @@ build_options = {'packages': [], 'excludes': []}
 base = 'console'
 
 executables = [
-    Executable('Stray.py', base=base)
+    Executable('content_server_refactored.py', base=base)
 ]
 
-setup(name='Stray',
+setup(name='ArcticWEB',
       version = '1.0',
-      description = 'Stray Client',
+      description = 'ArcticWEB',
       options = {'build_exe': build_options},
       executables = executables)
