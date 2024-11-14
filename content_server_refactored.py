@@ -23,14 +23,6 @@ class ContentServer:
             self.settings = json.load(setting)
         self.logger.info("Settings loaded successfully!")
 
-        if self.settings["connect_to_main_server"]:
-            self.main_server_ip = self.settings["main_server_ip"]
-            self.main_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self.main_server.connect((self.main_server_ip, 5667))
-            self.main_server.settimeout(None)
-            self.main_server.send("1".encode("utf-8"))
-            self.logger.info("Connected to main server!")
-
         with open("whitelist.encrypted") as whl:
             self.whitelist = whl.read().splitlines()
         self.logger.info("Whitelist loaded successfully!")
@@ -41,6 +33,15 @@ class ContentServer:
         self.packet_delay = 0.01
     
     def start(self):
+        if self.settings["connect_to_main_server"] == "True":
+            self.main_server_ip = self.settings["main_server_ip"]
+            self.main_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.main_server.connect((self.main_server_ip, 5667))
+            self.main_server.settimeout(None)
+            self.main_server.send("1".encode("utf-8"))
+            self.main_server.send(self.settings["names"]["label"].encode())
+            self.logger.info("Connected to main server!")
+
         self.socket.bind((self.host, self.port))
         self.socket.listen(10)
         self.logger.info("Waiting for connections!")
@@ -202,7 +203,7 @@ class ContentServer:
         sites.remove("websites.list") # we don't need to include the list file
         if site_name in sites:
             with open(f"sites/{site_name}") as site:
-                client.send(site.encode())
+                client.send(site.read().encode())
         else:
             client.send(self.settings["messages"]["not_found"].encode())
         self.logger.info(f"{self.clients[client]['nickname']} requested {site_name}!")
