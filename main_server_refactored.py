@@ -33,7 +33,7 @@ class MainServer:
     def handle_client(self, client_socket: socket.socket, client_address:socket.AddressInfo):
         is_server = client_socket.recv(1).decode() == "1"
         if is_server:
-            servername = client_socket.recv(1024).decode()
+            servername = client_socket.recv(1024).decode().strip()
             self.logger.info(f"Got server connection from {servername}!")
             saved_servers = os.listdir("servers/server_configs")
             if servername not in saved_servers:
