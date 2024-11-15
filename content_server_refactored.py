@@ -80,7 +80,8 @@ class ContentServer:
             "EXIT": self.disconnect_user,
             "SUDO": self.attempt_promotion,
             "WHTL": self.attempt_whitelist_addition,
-            "UPGD": self.send_upgrade
+            "UPGD": self.send_upgrade,
+            "": self.nop
         }
 
         while True:
@@ -89,7 +90,10 @@ class ContentServer:
                 return
             sleep(0.01)
             message = client_socket.recv(1024).decode()
-            command_handlers.get(message[:4])(message, client_socket)
+            command_handlers.get(message[:4], self.unknown_command)(message, client_socket)
+    
+    def nop(*a):
+        pass
     
     def user_join(self, message: str, client: socket.socket):
         nickname = message[message.index(";")+1:]
