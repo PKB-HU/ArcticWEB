@@ -42,9 +42,7 @@ class MainServer:
         else:
             # send back list of available servers
             servers = os.listdir("servers/server_configs")
-            serverlist_message = "Available servers:\n"
-            for server in servers:
-                serverlist_message += f"\t{server}\n"
+            serverlist_message = "\n".join(servers)
             client_socket.send(serverlist_message.encode())
             # receive server selection
             selected_server = client_socket.recv(1024).decode()
