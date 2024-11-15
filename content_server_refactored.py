@@ -54,11 +54,11 @@ class ContentServer:
     def handle_client(self, client_socket: socket.socket, client_address: socket.socket):
         # Send config to client
         self.logger.info("Sending settings...")
-        client_socket.send(self.settings["rules"]["rules"].encode("utf-8"))
+        client_socket.send((self.settings["rules"]["rules"]+";").encode("utf-8"))
 
         with open("version") as version_file:
             version = version_file.read()
-            client_socket.send(version.encode("utf-8"))
+            client_socket.send((version + ";").encode("utf-8"))
             self.logger.info(f"Sent version {version} to {client_address}")
 
         self.logger.info("Done!")
@@ -91,7 +91,7 @@ class ContentServer:
             command_handlers.get(message[:4])(message, client_socket)
     
     def user_join(self, message: str, client: socket.socket):
-        nickname = message[len("usr"):]
+        nickname = message[message.index(";")+1:]
         self.clients[client]["nickname"] = nickname
         if nickname in self.admins:
             self.clients[client]["admin"] = True
@@ -125,7 +125,7 @@ class ContentServer:
         need_more_content = True
         while need_more_content:
             content = client.recv(1024).decode()
-            if content == "###close":
+            if content == "//quit":
                 need_more_content = False
                 site_file.write(f"Created by: {self.clients[client]['nickname']}")
                 self.logger.info(f"{self.clients[client]['nickname']} created {site_name}!")
