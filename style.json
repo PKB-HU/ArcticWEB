@@ -1,0 +1,32 @@
+{
+    "colors": {
+        "buttonframe_background" : "black",
+        "opacity" : "0.9",
+        "label_color" : "red",
+        "label_background_color" : "black",
+        "label_size" : "100",
+        "background" : "black",
+        "font_color" : "red",
+        "font_background_color" : "black",
+        "result_text_box_color" : "black",
+        "result_text_box_edge_color" : "red",
+        "result_text_box_edge_color_selected" : "orange",
+        "result_text_box_edge_size" : "2",
+        "searchbar_color" : "black",
+        "searchbar_edge_color" : "red",
+        "searchbar_edge_color_selected" : "orange",
+        "searchbar_edge_size" : "1",
+        "send_command_background_color" : "black",
+        "send_command_text_color" : "red",
+        "send_command_pressed_background_color" : "red",
+        "send_command_pressed_text_color" : "black",
+        "refresh_list_background_color" : "black",
+        "refresh_list_text_color" : "red",
+        "refresh_list_pressed_background_color" : "red",
+        "refresh_list_pressed_text_color" : "orange",
+        "create_new_background_color" : "black",
+        "create_new_text_color" : "red",
+        "create_new_pressed_background_color" : "red",
+        "create_new_pressed_text_color" : "orange"
+    }
+}
