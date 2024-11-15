@@ -110,7 +110,7 @@ class ContentServer:
         self.logger.info(f"{nickname} joined!")
     
     def serve_site(self, message: str, client: socket.socket):
-        site_name = message[len("need"):]
+        site_name = message[5:]
         sites = os.listdir("sites")
         sites.remove("websites.list") # we don't need to include the list file
         if site_name in sites:
