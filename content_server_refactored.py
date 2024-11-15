@@ -27,7 +27,7 @@ class ContentServer:
             self.whitelist = whl.read().splitlines()
         self.logger.info("Whitelist loaded successfully!")
         with open("admins.json") as admin_json:
-            self.admins = json.load(admin_json)
+            self.admins:list[str] = json.load(admin_json)
         self.logger.info("Admins loaded successfully!")
         self.clients = {}
         self.packet_delay = 0.01
@@ -89,7 +89,7 @@ class ContentServer:
                 # user had disconnected
                 return
             sleep(0.01)
-            message = client_socket.recv(1024).decode()
+            message = client_socket.recv(65535).decode()
             command_handlers.get(message[:4], self.unknown_command)(message, client_socket)
     
     def nop(*a):
@@ -143,28 +143,33 @@ class ContentServer:
         client.close()
     
     def attempt_promotion(self, message: str, client: socket.socket):
-        username = client.recv(1024).decode()
+        username = message[5:]
         if self.clients[client]["admin"]:
             if username in self.admins:
                 self.logger.info(f"{username} is already an admin.")
                 client.send(self.settings["messages"]["failed_to_add_someone_to_admins"].encode())
             else:
-                self.admins.add(username)
+                self.admins.append(username)
                 self.logger.info(f"{self.clients[client]['nickname']} promoted {username} to admin.")
-                client.send(self.settings["messages"]["added_someone_to_admins"].format(username).encode())
+                client.send(self.settings["messages"]["added_someone_to_admins"].replace("{user}", username).encode())
+                with open("admins.json", "w") as adminfile:
+                    json.dump(self.admins, adminfile)
         else:
             client.send(self.settings["messages"]["command_disabled"].encode())
     
     def attempt_whitelist_addition(self, message: str, client: socket.socket):
-        username = client.recv(1024).decode()
+        username = message[5:]
+        if "open" in self.whitelist:
+            client.send(self.settings["messages"]["command_disabled"].encode())
+            return
         if self.clients[client]["admin"]:
             if username in self.whitelist:
                 self.logger.info(f"{username} is already whitelisted.")
                 client.send(self.settings["messages"]["failed_to_add_someone_to_whitelist"].encode())
             else:
-                self.whitelist.add(username)
+                self.whitelist.append(username)
                 self.logger.info(f"{self.clients[client]['nickname']} whitelisted {username}.")
-                client.send(self.settings["messages"]["added_someone_to_whitelist"].format(username).encode())
+                client.send(self.settings["messages"]["added_someone_to_whitelist"].replace("{user}", username).encode())
         else:
             client.send(self.settings["messages"]["command_disabled"].encode())
     
