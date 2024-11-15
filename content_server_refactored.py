@@ -36,6 +36,7 @@ class ContentServer:
         if self.settings["connect_to_main_server"] == "True":
             self.main_server_ip = self.settings["main_server_ip"]
             self.main_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             self.main_server.connect((self.main_server_ip, 5667))
             self.main_server.settimeout(None)
             self.main_server.send("1".encode("utf-8"))
@@ -120,18 +121,12 @@ class ContentServer:
         self.logger.info(f"{self.clients[client]['nickname']} requested {site_name}!")
     
     def create_site(self, message: str, client: socket.socket):
-        site_name = message[len("create"):]
+        site_name = message[5:message.index(";", 6)]
         site_file = open(f"sites/{site_name}", "w")
-        need_more_content = True
-        while need_more_content:
-            content = client.recv(1024).decode()
-            if content == "//quit":
-                need_more_content = False
-                site_file.write(f"Created by: {self.clients[client]['nickname']}")
-                self.logger.info(f"{self.clients[client]['nickname']} created {site_name}!")
-                site_file.close()
-            else:
-                site_file.write(content + "\n")
+        site_file.write(message[message.index(";", 6)+1:]+"\n")
+        site_file.write(f"Created by: {self.clients[client]['nickname']}")
+        self.logger.info(f"{self.clients[client]['nickname']} created {site_name}!")
+        site_file.close()
     
     def list_sites(self, message: str, client: socket.socket):
         sites = os.listdir("sites")

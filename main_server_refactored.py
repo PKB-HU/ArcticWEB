@@ -19,6 +19,7 @@ class MainServer:
         self.logger.info(f"Starting main server on {host}:{port}")
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.settimeout(None)
+        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
     def start(self):
         self.socket.bind((self.host, self.port))
