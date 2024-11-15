@@ -39,7 +39,6 @@ class MainServer:
             if servername not in saved_servers:
                 with open("servers/server_configs/" + servername, "w") as serverfile:
                     serverfile.write(str(client_address[0]))
-            # TODO implement saving server name and ip
         else:
             # send back list of available servers
             servers = os.listdir("servers/server_configs")
