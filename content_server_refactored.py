@@ -54,92 +54,6 @@ class ContentServer:
     def handle_client(self, client_socket: socket.socket, client_address: socket.socket):
         # Send config to client
         self.logger.info("Sending settings...")
-
-        # TODO replace waits with separator. BREEDING GROUND FOR RACE CONDITION
-        client_socket.send(self.settings["names"]["label"].encode('utf-8'))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["names"]["server_name"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["names"]["server_name_to_show"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["colors"]["buttonframe_background"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["colors"]["opacity"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["colors"]["label_color"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["colors"]["label_background_color"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["colors"]["label_size"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["colors"]["background"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["colors"]["font_color"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["colors"]["font_background_color"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["colors"]["result_text_box_color"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["colors"]["result_text_box_edge_color"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["colors"]["result_text_box_edge_color_selected"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["colors"]["result_text_box_edge_size"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["colors"]["searchbar_color"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["colors"]["searchbar_edge_color"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["colors"]["searchbar_edge_color_selected"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["colors"]["searchbar_edge_size"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["colors"]["send_command_background_color"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["colors"]["send_command_text_color"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["colors"]["send_command_pressed_background_color"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["colors"]["send_command_pressed_text_color"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["colors"]["refresh_list_background_color"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["colors"]["refresh_list_text_color"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["colors"]["refresh_list_pressed_background_color"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["colors"]["refresh_list_pressed_text_color"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["colors"]["create_new_background_color"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["colors"]["create_new_text_color"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["colors"]["create_new_pressed_background_color"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["colors"]["create_new_pressed_text_color"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["messages"]["start_text"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["messages"]["not_found"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["messages"]["got_admin"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["messages"]["maintenance"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["messages"]["not_on_whitelist"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["messages"]["help"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["messages"]["added_someone_to_admins"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["messages"]["failed_to_add_someone_to_admins"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["messages"]["added_someone_to_whitelist"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["messages"]["failed_to_add_someone_to_whitelist"].encode("utf-8"))
-        sleep(self.packet_delay)
-        client_socket.send(self.settings["messages"]["command_disabled"].encode("utf-8"))
-        sleep(self.packet_delay)
         client_socket.send(self.settings["rules"]["rules"].encode("utf-8"))
 
         with open("version") as version_file:
@@ -158,13 +72,14 @@ class ContentServer:
 
         # Transition to command processing
         command_handlers = {
-            "usr": self.user_join,
-            "need": self.serve_site,
-            "create": self.create_site,
-            "list": self.list_sites,
-            "###close": self.disconnect_user,
-            "addAdmin": self.attempt_promotion,
-            "whitelist": self.attempt_whitelist_addition
+            "JOIN": self.user_join,
+            "RECV": self.serve_site,
+            "WRIT": self.create_site,
+            "LIST": self.list_sites,
+            "EXIT": self.disconnect_user,
+            "SUDO": self.attempt_promotion,
+            "WHTL": self.attempt_whitelist_addition,
+            "UPGD": self.send_upgrade
         }
 
         while True:
@@ -257,6 +172,10 @@ class ContentServer:
                 client.send(self.settings["messages"]["added_someone_to_whitelist"].format(username).encode())
         else:
             client.send(self.settings["messages"]["command_disabled"].encode())
+    
+    def send_upgrade(self, message: str, client: socket.socket):
+        pass
+        # TODO upgrade process
     
 if __name__ == "__main__":
     server = ContentServer("127.0.0.1", 5666)
