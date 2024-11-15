@@ -88,28 +88,24 @@ class ContentServer:
                 return
             sleep(0.01)
             message = client_socket.recv(1024).decode()
-            for command in command_handlers.keys():
-                if message.startswith(command):
-                    command_handlers[command](message, client_socket)
-                    break
+            command_handlers.get(message[:4])(message, client_socket)
     
     def user_join(self, message: str, client: socket.socket):
         nickname = message[len("usr"):]
         self.clients[client]["nickname"] = nickname
         if nickname in self.admins:
             self.clients[client]["admin"] = True
-            client.send(b'1')
+            client.send(b'YES')
         else:
-            client.send(b"0")
+            client.send(b"NOO")
         sleep(self.packet_delay)
         if nickname in self.whitelist or self.whitelist == ["open"]:
             self.clients[client]["whitelisted"] = True
         else:
-            client.send(b"cl")
+            client.send(b"403")
             # Not whitelisted -> disconnect
             self.disconnect_user(message, client)
             return
-        client.send(b"let")
         self.logger.info(f"{nickname} joined!")
     
     def serve_site(self, message: str, client: socket.socket):
@@ -140,7 +136,7 @@ class ContentServer:
     def list_sites(self, message: str, client: socket.socket):
         sites = os.listdir("sites")
         sites.remove("websites.list") # we don't need to include the list file
-        client.send("\n ".join(sites).encode())
+        client.send(",".join(sites).encode())
     
     def disconnect_user(self, message: str, client: socket.socket):
         self.logger.info(f"{self.clients[client]['nickname']} has left.")
@@ -176,6 +172,9 @@ class ContentServer:
     def send_upgrade(self, message: str, client: socket.socket):
         pass
         # TODO upgrade process
+    
+    def unknown_command(self, message: str, client: socket.socket):
+        self.logger.info(f"Unknown command in {message}.")
     
 if __name__ == "__main__":
     server = ContentServer("127.0.0.1", 5666)
