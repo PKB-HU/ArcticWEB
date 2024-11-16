@@ -13,7 +13,7 @@ class ArcticClient:
         self.root = tk.Tk()
         self.root.title("Arctic Client")
 
-        self.hub_server = "127.0.0.1"
+        self.hub_server = "node1.kranem.hu"
         self.packet_delay = 0.02
 
         self.cds_ip = ""
@@ -56,12 +56,12 @@ class ArcticClient:
             sleep(self.packet_delay)
             self.socket.close()
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self.socket.connect((self.cds_ip, 5666))
+            self.socket.connect((self.cds_ip, 6071))
             sleep(self.packet_delay)
             self.socket.send(f"JOIN;{self.username}".encode())
             self.handle_user()
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.socket.connect((self.hub_server, 5667))
+        self.socket.connect((self.hub_server, 6081))
         self.socket.settimeout(None)
         self.socket.send(b'0') # We are not a server
         serverlist = self.socket.recv(65535).decode().split("\n")
