@@ -38,17 +38,17 @@ class MainServer:
             self.logger.info(f"Got server connection from {servername}!")
             saved_servers = os.listdir("servers/server_configs")
             if servername not in saved_servers:
-                with open("servers/server_configs/" + servername, "w") as serverfile:
+                with open("server/servers/server_configs/" + servername, "w") as serverfile:
                     serverfile.write(str(client_address[0]))
         else:
             # send back list of available servers
-            servers = os.listdir("servers/server_configs")
+            servers = os.listdir("server/servers/server_configs")
             serverlist_message = "\n".join(servers)
             client_socket.send(serverlist_message.encode())
             # receive server selection
             selected_server = client_socket.recv(1024).decode()
             # connect to selected server
-            with open(f"servers/server_configs/{selected_server}", "r") as server_config:
+            with open(f"server/servers/server_configs/{selected_server}", "r") as server_config:
                 server_address = server_config.read()
                 client_socket.send(server_address.encode())
             # My work here is done

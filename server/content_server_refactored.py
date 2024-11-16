@@ -19,14 +19,14 @@ class ContentServer:
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.settimeout(None)
         self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        with open("settings.json") as setting:
+        with open("server/settings.json") as setting:
             self.settings = json.load(setting)
         self.logger.info("Settings loaded successfully!")
 
         with open("whitelist.encrypted") as whl:
             self.whitelist = whl.read().splitlines()
         self.logger.info("Whitelist loaded successfully!")
-        with open("admins.json") as admin_json:
+        with open("server/admins.json") as admin_json:
             self.admins:list[str] = json.load(admin_json)
         self.logger.info("Admins loaded successfully!")
         self.clients = {}
@@ -58,7 +58,7 @@ class ContentServer:
         self.logger.info("Sending settings...")
         client_socket.send((self.settings["rules"]["rules"]+";").encode("utf-8"))
 
-        with open("version") as version_file:
+        with open("server/version") as version_file:
             version = version_file.read()
             client_socket.send((version + ";").encode("utf-8"))
             self.logger.info(f"Sent version {version} to {client_address}")
@@ -116,10 +116,10 @@ class ContentServer:
     
     def serve_site(self, message: str, client: socket.socket):
         site_name = message[5:]
-        sites = os.listdir("sites")
+        sites = os.listdir("server/sites")
         sites.remove("websites.list") # we don't need to include the list file
         if site_name in sites:
-            with open(f"sites/{site_name}") as site:
+            with open(f"server/sites/{site_name}") as site:
                 client.send(site.read().encode())
         else:
             client.send(self.settings["messages"]["not_found"].encode())
@@ -127,14 +127,14 @@ class ContentServer:
     
     def create_site(self, message: str, client: socket.socket):
         site_name = message[5:message.index(";", 6)]
-        site_file = open(f"sites/{site_name}", "w")
+        site_file = open(f"server/sites/{site_name}", "w")
         site_file.write(message[message.index(";", 6)+1:]+"\n")
         site_file.write(f"Created by: {self.clients[client]['nickname']}")
         self.logger.info(f"{self.clients[client]['nickname']} created {site_name}!")
         site_file.close()
     
     def list_sites(self, message: str, client: socket.socket):
-        sites = os.listdir("sites")
+        sites = os.listdir("server/sites")
         sites.remove("websites.list") # we don't need to include the list file
         client.send(",".join(sites).encode())
     
@@ -153,7 +153,7 @@ class ContentServer:
                 self.admins.append(username)
                 self.logger.info(f"{self.clients[client]['nickname']} promoted {username} to admin.")
                 client.send(self.settings["messages"]["added_someone_to_admins"].replace("{user}", username).encode())
-                with open("admins.json", "w") as adminfile:
+                with open("server/admins.json", "w") as adminfile:
                     json.dump(self.admins, adminfile)
         else:
             client.send(self.settings["messages"]["command_disabled"].encode())
