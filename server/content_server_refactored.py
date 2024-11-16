@@ -35,7 +35,7 @@ class ContentServer:
     def start(self):
         if self.settings["connect_to_main_server"] == "True":
             self.main_server_ip = self.settings["main_server_ip"]
-            self.main_server_port = self.settings["main_server_port"]
+            self.main_server_port = int(self.settings["main_server_port"])
             self.main_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             self.main_server.connect((self.main_server_ip, self.main_server_port))
@@ -182,5 +182,5 @@ class ContentServer:
         self.logger.info(f"Unknown command in {message}.")
     
 if __name__ == "__main__":
-    server = ContentServer("127.0.0.1", 5666)
+    server = ContentServer("127.0.0.1", 6071)
     server.start()
