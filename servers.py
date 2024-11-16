@@ -8,8 +8,8 @@ logging.basicConfig(level=logging.DEBUG)
 
 class ArcticServer:
     def __init__(self):
-        self.main_server = MainServer("127.0.0.1", 5667)
-        self.content_server = ContentServer("127.0.0.1", 5666)
+        self.main_server = MainServer("node.kranem.hu", 6081)
+        self.content_server = ContentServer("node1.kranem.hu", 6071)
         self.logger = logging.getLogger("ArcticServer")
         self.logger.info("Starting Arctic Server...")
         self.main_server_thread = threading.Thread(target=self.main_server.start)
