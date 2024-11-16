@@ -6,7 +6,8 @@
     },
 
     "connect_to_main_server": "True",
-    "main_server_ip": "127.0.0.1",
+    "main_server_ip": "node1.kranem.hu",
+    "main_server_port": "6081",
 
     "whitelist" : "open",
 

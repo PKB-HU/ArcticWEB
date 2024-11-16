@@ -35,9 +35,10 @@ class ContentServer:
     def start(self):
         if self.settings["connect_to_main_server"] == "True":
             self.main_server_ip = self.settings["main_server_ip"]
+            self.main_server_port = self.settings["main_server_port"]
             self.main_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-            self.main_server.connect((self.main_server_ip, 5667))
+            self.main_server.connect((self.main_server_ip, self.main_server_port))
             self.main_server.settimeout(None)
             self.main_server.send("1".encode("utf-8"))
             self.main_server.send(self.settings["names"]["label"].encode())
