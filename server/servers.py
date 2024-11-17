@@ -2,8 +2,8 @@ import threading, logging
 from time import sleep
 import socket
 
-from server.main_server_refactored import MainServer
-from server.content_server_refactored import ContentServer
+from main_server_refactored import MainServer
+from content_server_refactored import ContentServer
 
 logging.basicConfig(level=logging.DEBUG)
 

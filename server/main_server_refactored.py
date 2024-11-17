@@ -36,7 +36,7 @@ class MainServer:
         if is_server:
             servername = client_socket.recv(1024).decode().strip()
             self.logger.info(f"Got server connection from {servername}!")
-            saved_servers = os.listdir("servers/server_configs")
+            saved_servers = os.listdir("server/servers/server_configs")
             if servername not in saved_servers:
                 with open("server/servers/server_configs/" + servername, "w") as serverfile:
                     serverfile.write(str(client_address[0]))
