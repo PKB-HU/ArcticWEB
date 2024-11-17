@@ -10,7 +10,7 @@ logging.basicConfig(stream=stdout, encoding='utf-8', level=logging.DEBUG)
 
 
 class ContentServer:
-    def __init__(self, host, port):
+    def __init__(self, host, port, main_server_ip, main_server_port):
 
         self.host = host
         self.port = port
@@ -31,11 +31,13 @@ class ContentServer:
         self.logger.info("Admins loaded successfully!")
         self.clients = {}
         self.packet_delay = 0.01
+        self.main_server_ip = main_server_ip
+        self.main_server_port = main_server_port
     
     def start(self):
         if self.settings["connect_to_main_server"] == "True":
-            self.main_server_ip = self.settings["main_server_ip"]
-            self.main_server_port = int(self.settings["main_server_port"])
+            self.main_server_ip = self.main_server_ip
+            self.main_server_port = self.main_server_port
             self.main_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             self.main_server.connect((self.main_server_ip, self.main_server_port))

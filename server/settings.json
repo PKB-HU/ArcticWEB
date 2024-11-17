@@ -6,8 +6,6 @@
     },
 
     "connect_to_main_server": "True",
-    "main_server_ip": "172.18.0.16",
-    "main_server_port": "6081",
 
     "whitelist" : "open",
 
