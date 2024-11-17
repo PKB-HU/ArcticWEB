@@ -5,12 +5,13 @@ import requests as req
 from tkinter import scrolledtext, ttk, messagebox
 from time import sleep
 from json import load, dump
+import ttkbootstrap as ttk
 
 class ArcticClient:
     def __init__(self):
         self.username = None
 
-        self.root = tk.Tk()
+        self.root = ttk.Window(themename="darkly")
         self.root.title("Arctic Client")
 
         self.hub_server = "node1.kranem.hu"
@@ -30,19 +31,18 @@ class ArcticClient:
         def username_entered(event):
             self.username = username_input.get()
             self.root.title(f"Arctic Client - {self.username}")
-            setup_widgets.grid_forget()
+            username_label.destroy()
+            username_input.destroy()
             self.connect_to_server()
-        self.root.geometry("1280x1020")
+        self.root.geometry("200x50")
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
         
-        self.root.configure(bg=self.style["background"])
+        #self.root.configure(bg=self.style["background"])
 
-        setup_widgets = tk.Canvas(self.root)
-        username_label = tk.Label(setup_widgets, text="Enter username: ", bg=self.background_color, fg=self.font_color)
-        username_input = tk.Entry(setup_widgets, bg=self.background_color, fg=self.font_color)
-        username_label.grid(column=0, row=0)
-        username_input.grid(column=1, row=0)
-        setup_widgets.grid(column=0, row=0)
+        username_label = ttk.Label(self.root, text="Enter username: ", font=('Helvetica'), bootstyle="success")
+        username_input = ttk.Entry(self.root, bootstyle="primary")
+        username_label.pack()
+        username_input.pack()
         username_input.bind("<Return>", username_entered)
     
     def connect_to_server(self):
@@ -59,17 +59,21 @@ class ArcticClient:
             self.socket.connect((self.cds_ip, 6071))
             sleep(self.packet_delay)
             self.socket.send(f"JOIN;{self.username}".encode())
+            self.serverlist_widget.destroy()
+            self.serverlist_label.destroy()
             self.handle_user()
+
+        self.root.geometry("550x600")
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.connect((self.hub_server, 6081))
         self.socket.settimeout(None)
         self.socket.send(b'0') # We are not a server
         serverlist = self.socket.recv(65535).decode().split("\n")
-        self.serverlist_label = tk.Label(self.root, text="Select a server to connect to: ",
-                                         bg=self.background_color, fg=self.font_color)
-        self.serverlist_widget = ttk.Combobox(self.root, values=serverlist, state="readonly", foreground=self.font_color)
-        self.serverlist_label.grid(column=0, row=0)
-        self.serverlist_widget.grid(column=1, row=0)
+        self.serverlist_label = ttk.Label(self.root, text="Connect to : ",
+                                         bootstyle="primary", font=('Helvetica', 20))
+        self.serverlist_widget = ttk.Combobox(self.root, values=serverlist, state="readonly", bootstyle="info")
+        self.serverlist_label.pack()
+        self.serverlist_widget.pack()
         self.serverlist_widget.current(0)
         self.serverlist_widget.bind("<<ComboboxSelected>>", server_selection_made)
 
@@ -98,7 +102,7 @@ class ArcticClient:
         sites = self.get_site_list()
         text = '\n'.join(sites)
         self.update_textarea(f"Sites: \n{text}")
-        self.textarea.grid(row=4, columnspan=4)
+        self.textarea.pack()
     
     def create_site(self):
         sitename = None
@@ -140,7 +144,7 @@ class ArcticClient:
         sitename_label = tk.Label(self.view_canvas, text="Select a site to view: ")
         sitename_label.grid(column=0, row=2)
         sitename_combobox.grid(column=1, row=2)
-        self.view_canvas.grid(column=0, row=1)
+        self.view_canvas.pack()
     
     def promote(self):
         self.clear_ui()
@@ -194,23 +198,26 @@ class ArcticClient:
         return data.split(separator)[0]
     
     def show_ui(self, admin):
+        self.textarea = scrolledtext.ScrolledText(self.root, state="disabled")
+
         self.menu_ui = tk.Canvas(self.root)
+        menu_grid = ttk.Canvas(self.menu_ui)
         self.server_select_button = tk.Button(self.menu_ui, text="Back to server selection", command=self.server_select)
-        self.server_select_button.grid(column=1, row=0)
+        self.server_select_button.pack(pady=20)
         self.list_site_button = tk.Button(self.menu_ui, text="List sites", command=self.list_sites)
-        self.list_site_button.grid(column=0, row=1)
+        self.list_site_button.pack()
         self.create_site_button = tk.Button(self.menu_ui, text="Create site", command=self.create_site)
-        self.create_site_button.grid(column=1, row=1)
+        self.create_site_button.pack()
         self.view_site_button = tk.Button(self.menu_ui, text="View site", command=self.view_site)
-        self.view_site_button.grid(column=2, row=1)
+        self.view_site_button.pack()
         if admin:
             self.promote_button = tk.Button(self.menu_ui, text="Promote user", command=self.promote)
-            self.promote_button.grid(column=3, row=1)
+            self.promote_button.pack()
             self.whitelist_add = tk.Button(self.menu_ui, text="Add user to whitelist", command=self.whitelist)
-            self.whitelist_add.grid(column=4, row=1)
-        self.textarea = scrolledtext.ScrolledText(self.root, state="disabled")
-        self.textarea.grid(row=4, columnspan=4)
-        self.menu_ui.grid(row=0)
+            self.whitelist_add.pack()
+        self.menu_ui.pack()
+        self.textarea.pack()
+
     
     def server_select(self):
         self.menu_ui.grid_forget()
@@ -237,6 +244,7 @@ class ArcticClient:
         self.textarea.delete("1.0", tk.END)
         self.textarea.insert(tk.END, message + "\n")
         self.textarea.config(state="disabled")
+
 
 if __name__ == "__main__":
     client = ArcticClient()
