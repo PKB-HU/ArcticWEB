@@ -23,7 +23,7 @@ class ContentServer:
             self.settings = json.load(setting)
         self.logger.info("Settings loaded successfully!")
 
-        with open("whitelist.encrypted") as whl:
+        with open("server/whitelist.encrypted") as whl:
             self.whitelist = whl.read().splitlines()
         self.logger.info("Whitelist loaded successfully!")
         with open("server/admins.json") as admin_json:
