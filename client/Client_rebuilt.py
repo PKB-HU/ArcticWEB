@@ -11,7 +11,7 @@ class ArcticClient:
     def __init__(self):
         self.username = None
 
-        self.root = ttk.Window(themename="darkly")
+        self.root = ttk.Window(themename="cosmo")
         self.root.title("Arctic Client")
 
         self.hub_server = "node1.kranem.hu"
@@ -28,11 +28,11 @@ class ArcticClient:
 
     
     def setup_window(self):
+        self.clear_root(self.root)
         def username_entered(event):
             self.username = username_input.get()
             self.root.title(f"Arctic Client - {self.username}")
-            username_label.destroy()
-            username_input.destroy()
+            self.clear_root(self.root)
             self.connect_to_server()
         self.root.geometry("200x50")
         self.root.protocol("WM_DELETE_WINDOW", self.on_close)
@@ -46,9 +46,9 @@ class ArcticClient:
         username_input.bind("<Return>", username_entered)
     
     def connect_to_server(self):
+        self.clear_root(self.root)
         def server_selection_made(event):
             servername = self.serverlist_widget.get()
-            self.serverlist_widget.grid_forget()
             self.serverlist_label.config(text=f"Selected server: {servername}")
             self.socket.send(servername.encode())
             sleep(self.packet_delay)
@@ -59,8 +59,7 @@ class ArcticClient:
             self.socket.connect((self.cds_ip, 6071))
             sleep(self.packet_delay)
             self.socket.send(f"JOIN;{self.username}".encode())
-            self.serverlist_widget.destroy()
-            self.serverlist_label.destroy()
+            self.clear_root(self.root)
             self.handle_user()
 
         self.root.geometry("550x600")
@@ -105,9 +104,9 @@ class ArcticClient:
         self.textarea.pack()
     
     def create_site(self):
+        self.site_creation_root = ttk.Window()
         sitename = None
-        self.clear_ui()
-        self.site_create_canvas = tk.Canvas(self.root)
+        self.site_create_canvas = tk.Canvas(self.site_creation_root)
         def sitename_clicked():
             sitename = sitename_entry.get()
             content = sitecontent_entry.get("1.0", "end-1c")
@@ -115,6 +114,7 @@ class ArcticClient:
             sleep(self.packet_delay)
             self.socket.send(b"//quit")
             self.site_create_canvas.grid_forget()
+            self.site_creation_root.destroy()
         self.textarea.grid_forget()
         sitename_label = tk.Label(self.site_create_canvas, text="Enter the title of the site: ")
         sitename_entry = tk.Entry(self.site_create_canvas)
@@ -126,10 +126,13 @@ class ArcticClient:
         sitecontent_label.grid(column=0, row=3)
         send_site_button.grid(column=1, row=3)
         sitecontent_entry.grid(column=1, row=4)
-        self.site_create_canvas.grid(column=0, row=1)
+        self.site_create_canvas.pack()
     
     def view_site(self):
-        self.clear_ui()
+        try:
+            self.view_canvas.destroy()
+        except:
+            pass
         self.view_canvas = tk.Canvas(self.root)
         sites = self.get_site_list()
         def view_site_selection_made(event):
@@ -201,22 +204,24 @@ class ArcticClient:
         self.textarea = scrolledtext.ScrolledText(self.root, state="disabled")
 
         self.menu_ui = tk.Canvas(self.root)
-        menu_grid = ttk.Canvas(self.menu_ui)
-        self.server_select_button = tk.Button(self.menu_ui, text="Back to server selection", command=self.server_select)
+        self.menu_grid = ttk.Canvas(self.menu_ui)
+        self.server_select_button = tk.Button(self.menu_ui, text="Back to server selection", command=self.server_select, width=20, height=1)
         self.server_select_button.pack(pady=20)
-        self.list_site_button = tk.Button(self.menu_ui, text="List sites", command=self.list_sites)
-        self.list_site_button.pack()
-        self.create_site_button = tk.Button(self.menu_ui, text="Create site", command=self.create_site)
-        self.create_site_button.pack()
-        self.view_site_button = tk.Button(self.menu_ui, text="View site", command=self.view_site)
-        self.view_site_button.pack()
+        self.list_site_button = tk.Button(self.menu_grid, text="List sites", command=self.list_sites, width=10, height=2)
+        self.list_site_button.grid(row=1, column=0, padx=10, pady=20)
+        self.create_site_button = tk.Button(self.menu_grid, text="Create site", command=self.create_site, width=10, height=2)
+        self.create_site_button.grid(row=1, column=1, padx=10, pady=20)
+        #self.view_site_button = tk.Button(self.menu_grid, text="View site", command=self.view_site, width=10, height=2)
+        #self.view_site_button.grid(row=1, column=2, padx=10, pady=20)
         if admin:
             self.promote_button = tk.Button(self.menu_ui, text="Promote user", command=self.promote)
             self.promote_button.pack()
             self.whitelist_add = tk.Button(self.menu_ui, text="Add user to whitelist", command=self.whitelist)
             self.whitelist_add.pack()
         self.menu_ui.pack()
+        self.menu_grid.pack()
         self.textarea.pack()
+        self.view_site()
 
     
     def server_select(self):
@@ -226,6 +231,11 @@ class ArcticClient:
         self.connect_to_server()
     
     def clear_ui(self):
+
+        # Depreciated
+        import warnings
+        warnings.warn("This function is depreciated! Use clear_root() instead!")
+
         try:
             self.site_create_canvas.grid_forget()
         except AttributeError:
@@ -244,6 +254,10 @@ class ArcticClient:
         self.textarea.delete("1.0", tk.END)
         self.textarea.insert(tk.END, message + "\n")
         self.textarea.config(state="disabled")
+
+    def clear_root(self, root):
+        for ele in root.winfo_children():
+            ele.destroy()
 
 
 if __name__ == "__main__":
