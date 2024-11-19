@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtWebEngineWidgets import *
 import sys
 
-
+print("Client must be viewing a site!")
 
 # creating main window class
 class MainWindow(QMainWindow):
@@ -17,7 +17,7 @@ class MainWindow(QMainWindow):
         self.browser = QWebEngineView()
 
         # setting default browser url as google
-        self.browser.setUrl(QUrl("http://kirilovsys.web.app"))
+        self.browser.setUrl(QUrl("http://localhost:5000/"))
 
         # set this browser as central widget or main window
         self.setCentralWidget(self.browser)
@@ -111,7 +111,7 @@ class MainWindow(QMainWindow):
 app = QApplication(sys.argv)
 
 # setting name to the application
-app.setApplicationName("Geek Browser")
+app.setApplicationName("ArcticWEB HTML Extension")
 
 # creating a main window object
 window = MainWindow()
