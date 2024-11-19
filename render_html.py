@@ -6,7 +6,6 @@ import sys
 
 
 
-
 # creating main window class
 class MainWindow(QMainWindow):
 

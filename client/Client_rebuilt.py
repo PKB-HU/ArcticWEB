@@ -1,11 +1,22 @@
+import os
 import tkinter as tk
 from tkinter.simpledialog import askstring
 import socket
+from urllib import request
+
 import requests as req
 from tkinter import scrolledtext, ttk, messagebox
 from time import sleep
 from json import load, dump
 import ttkbootstrap as ttk
+import threading
+from flask import Flask, render_template
+app = Flask(__name__)
+import multiprocess as mp
+
+
+
+
 
 class ArcticClient:
     def __init__(self):
@@ -129,10 +140,7 @@ class ArcticClient:
         self.site_create_canvas.pack()
     
     def view_site(self):
-        try:
-            self.view_canvas.destroy()
-        except:
-            pass
+        self.html()
         self.view_canvas = tk.Canvas(self.root)
         sites = self.get_site_list()
         def view_site_selection_made(event):
@@ -141,12 +149,15 @@ class ArcticClient:
             sleep(self.packet_delay)
             content = self.socket.recv(65535).decode()
             self.update_textarea(f"Site: \n{content}")
+            html_file = open("templates/temp.html", "w")
+            html_file.write(content)
         sitename_combobox = ttk.Combobox(self.view_canvas, values=sites, state="readonly")
         sitename_combobox.current(0)
         sitename_combobox.bind("<<ComboboxSelected>>", view_site_selection_made)
         sitename_label = tk.Label(self.view_canvas, text="Select a site to view: ")
         sitename_label.grid(column=0, row=2)
         sitename_combobox.grid(column=1, row=2)
+
         self.view_canvas.pack()
     
     def promote(self):
@@ -184,6 +195,23 @@ class ArcticClient:
         whitelist_add_button.grid(column=2, row=2)
         self.whitelist_canvas.grid(column=0, row=1)
 
+
+    def html(self):
+        def serve():
+            from flask import Flask, render_template
+
+            app = Flask(__name__)
+
+            @app.route('/')
+            def index():
+                return render_template('temp.html')
+
+            if __name__ == '__main__':
+                # Running the app in debug mode will automatically reload the server when files are edited
+                app.run(debug=True, use_reloader=False)
+
+        t = threading.Thread(target=serve)
+        t.start()
 
     def on_close(self):
         if hasattr(self, "socket"):
