@@ -20,6 +20,7 @@ class ArcticServer:
     
     def start(self):
         self.main_server_thread.start()
+        sleep(1)  # wait for server to start up before starting content server thread
         self.content_server_thread.start()
         self.logger.info("Servers started!")
 
