@@ -1,21 +1,15 @@
 import os
 import tkinter as tk
-from tkinter.simpledialog import askstring
 import socket
-from urllib import request
-
-import requests as req
 from tkinter import scrolledtext, ttk, messagebox
 from time import sleep
-from json import load, dump
+from json import load
+from base64 import b64decode
+from zipfile import ZipFile
 import ttkbootstrap as ttk
 import threading
 from flask import Flask, render_template
 app = Flask(__name__)
-import multiprocess as mp
-
-
-
 
 
 class ArcticClient:
@@ -100,6 +94,20 @@ class ArcticClient:
         elif join_status == "403":
             messagebox.showerror("Error", "Access denied.")
             self.on_close()
+        with open("version") as version_file:
+            current_version = version_file.read().strip()
+            if current_version!= self.version:
+                sleep(0.2)
+                self.socket.send(b"UPGD")
+                sleep(1) # give the server enough time
+                encoded_zip = self.socket.recv(65536)
+                with open("upgrade.zip", "wb") as zip:
+                    zip.write(b64decode(encoded_zip))
+                with ZipFile("upgrade.zip") as zip:
+                    zip.extractall()
+                messagebox.showinfo("New version available", "New version available. Press OK to close the client and apply the upgrade.")
+                version_file.close()
+                self.on_close()
         self.show_ui(self.admin)
 
     def get_site_list(self):
@@ -217,6 +225,7 @@ class ArcticClient:
         if hasattr(self, "socket"):
             self.socket.close()
         self.root.destroy()
+        exit(0)
 
     def run(self):
         self.setup_window()
