@@ -177,8 +177,14 @@ class ContentServer:
             client.send(self.settings["messages"]["command_disabled"].encode())
     
     def send_upgrade(self, message: str, client: socket.socket):
-        pass
-        # TODO upgrade process
+        from base64 import b64encode as b64e
+        from zipfile import ZipFile
+        with ZipFile("clientupdate.zip", "w") as zipf:
+            for file in os.listdir("client"):
+                zipf.write(f"client/{file}", arcname=file)
+        client.send(b64e(open("clientupdate.zip", "rb").read()))
+        self.logger.info(f"Sent client update to {self.clients[client]['nickname']}.")
+        os.remove("clientupdate.zip")
     
     def unknown_command(self, message: str, client: socket.socket):
         self.logger.info(f"Unknown command in {message}.")
