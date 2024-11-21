@@ -1,18 +1,20 @@
 import threading, logging
-from time import sleep
+from time import sleep, strftime
 import socket
 
 from main_server_refactored import MainServer
 from content_server_refactored import ContentServer
 
-logging.basicConfig(level=logging.DEBUG)
+logfile = open(f"server/logs/{strftime('%Y%m%d-%H%M%S')}.txt", "w")
+
+logging.basicConfig(level=logging.DEBUG, stream=logfile)
 
 ip = socket.gethostbyname(socket.gethostname())
 
 class ArcticServer:
     def __init__(self):
-        self.main_server = MainServer(ip, 6081)
-        self.content_server = ContentServer(ip, 6071, ip, 6081)
+        self.main_server = MainServer(ip, 6081, logfile)
+        self.content_server = ContentServer(ip, 6071, ip, 6081, logfile)
         self.logger = logging.getLogger("ArcticServer")
         self.logger.info("Starting Arctic Server...")
         self.main_server_thread = threading.Thread(target=self.main_server.start)

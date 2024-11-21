@@ -6,14 +6,14 @@ import json
 from sys import stdout
 from time import sleep
 
-logging.basicConfig(stream=stdout, encoding='utf-8', level=logging.DEBUG)
 
 
 class ContentServer:
-    def __init__(self, host, port, main_server_ip, main_server_port):
+    def __init__(self, host, port, main_server_ip, main_server_port, logfile):
 
         self.host = host
         self.port = port
+        logging.basicConfig(stream=logfile, encoding='utf-8', level=logging.DEBUG)
         self.logger = logging.getLogger("ContentServer")
         self.logger.info(f"Starting content server on {host}:{port}")
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

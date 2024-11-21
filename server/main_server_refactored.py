@@ -4,12 +4,12 @@ import os
 import logging
 from sys import stdout
 
-logging.basicConfig(stream=stdout, encoding='utf-8', level=logging.DEBUG)
 
 class MainServer:
-    def __init__(self, host, port):
+    def __init__(self, host, port, logfile):
         self.host = host
         self.port = port
+        logging.basicConfig(stream=logfile, encoding='utf-8', level=logging.DEBUG)
         self.logger = logging.getLogger("MainServer")
         #self.logger.info("""
             #__  _____  ___    __    _
