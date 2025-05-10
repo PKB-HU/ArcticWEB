@@ -148,7 +148,6 @@ class ArcticClient:
         self.site_create_canvas.pack()
     
     def view_site(self):
-        self.html()
         self.view_canvas = tk.Canvas(self.root)
         sites = self.get_site_list()
         def view_site_selection_made(event):
